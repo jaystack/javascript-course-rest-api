@@ -1,15 +1,27 @@
+import express, {Express, Request, Response, NextFunction} from 'express';
 
-export class Greeter {
-    greeting: string;
-   
-    constructor(message: string) {
-      this.greeting = message;
-    }
-   
-    greet() {
-      return "Hello, " + this.greeting;
-    }
-  }
-   
-  let greeter = new Greeter("world ");
-  console.log(greeter.greet());
+const app: Express = express();
+const port: number = 3000;
+
+app.use(express.text());
+app.use(express.json());
+
+app.use((req:Request, res:Response, next:NextFunction)=>{
+  console.log('=> request type:', req.method);
+  next();
+});
+
+app.get('/', (req: Request, res: Response) => {
+    res.send('Express + TypeScript Server');
+});
+
+app.post('/', (req: Request, res: Response) => {
+  console.log(req.headers['content-type']);
+  console.log(req.body)
+  res.statusCode=201;
+  res.send();
+});
+
+app.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+});
